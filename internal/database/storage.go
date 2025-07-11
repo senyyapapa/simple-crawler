@@ -1,5 +1,6 @@
 package database
 
-type CrawlerStorage interface {
+type PageStorage interface {
 	GetInfo(url string) *Resources
+	SaveInfo(res *Resources) error
 }

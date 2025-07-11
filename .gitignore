@@ -1,3 +1,2 @@
 .env
-config_*.yml 
-!config_template.yml
+*.db
