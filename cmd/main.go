@@ -12,11 +12,11 @@ func main() {
 	log := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	startUrl := []string{
-		"https://golang.org",
-		"https://google.com/",
-		"https://habr.com/",
-		"https://developer.mozilla.org",
-		"https://yandex.ru",
+		"https://github.com",
+		"habr.com/ru/companies/domclick/articles/592087/",
+		"https://pkg.go.dev/golang.org/x/net/html",
+		"https://monkeytype.com/",
+		"https://comx.life/10072-chernyj-klever.html#chapters",
 	}
 
 	crawler, err := crawler.New(log, startUrl, cfg)

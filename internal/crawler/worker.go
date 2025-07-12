@@ -38,11 +38,9 @@ func (c *Crawler) worker(id int) {
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			c.log.Error("Failed to save resource to DB", "url", link, "error", err)
-			resp.Body.Close()
 			c.wg.Done()
 			continue
 		}
-		resp.Body.Close()
 
 		resources := &database.Resources{
 			URL:       link,
@@ -64,25 +62,14 @@ func (c *Crawler) worker(id int) {
 
 		c.log.Info("Found new links", "worker", id, "count", len(newLinks), "from", link)
 
-		for _, newLink := range newLinks {
-			c.addToQueue(newLink)
+		if len(newLinks) > 0 {
+			go func(links []string) {
+				c.wg.Add(len(links))
+				c.newLinksChan <- links
+			}(newLinks)
 		}
+
 		c.wg.Done()
 
 	}
-}
-
-func (c *Crawler) addToQueue(link string) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	if c.visited[link] {
-		return
-	}
-
-	c.visited[link] = true
-	c.wg.Add(1)
-	go func() {
-		c.linksChan <- link
-	}()
 }
